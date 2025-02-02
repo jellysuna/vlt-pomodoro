@@ -12,6 +12,8 @@ interface Props {
 function ListGroup({ items, heading, onSelectItem }: Props) {
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
+  heading = "";
+
   return (
     <>
       {/*telling react to wrap all children using Fragment */}
