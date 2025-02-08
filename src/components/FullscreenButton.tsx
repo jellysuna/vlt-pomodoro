@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface FullscreenButtonProps {
   onClick: () => void;
-  isFullscreen: boolean;
 }
 
-const FullscreenButton: React.FC<FullscreenButtonProps> = ({
-  onClick,
-  isFullscreen,
-}) => {
+const FullscreenButton: React.FC<FullscreenButtonProps> = ({ onClick }) => {
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(
+    !!document.fullscreenElement
+  );
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
