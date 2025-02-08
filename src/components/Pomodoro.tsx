@@ -6,7 +6,7 @@ import ResetButton from "./RestartButton";
 
 const Pomodoro: React.FC = () => {
   const [isRunning, setIsRunning] = useState(false);
-  const [time, setTime] = useState(25 * 60); // Start at 25 minutes
+  const [time, setTime] = useState(1 * 60); // Start at 25 minutes
 
   const handlePlayPause = () => {
     setIsRunning((prev) => !prev); // Toggle timer state
@@ -14,7 +14,7 @@ const Pomodoro: React.FC = () => {
 
   const handleReset = () => {
     setIsRunning(false); // Stop timer
-    setTime(25 * 60); // Reset timer to 25 minutes
+    setTime(1 * 60); // Reset timer to 25 minutes
   };
 
   return (
