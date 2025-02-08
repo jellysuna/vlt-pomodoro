@@ -7,12 +7,12 @@ import ResetButton from "./RestartButton";
 const Pomodoro: React.FC = () => {
   const [isRunning, setIsRunning] = useState(false);
 
-  const handlePlay = () => {
-    setIsRunning((prev) => !prev); // Toggle timer on/off
+  const handlePlayPause = () => {
+    setIsRunning((prev) => !prev); // Toggle timer state
   };
 
   const handleReset = () => {
-    setIsRunning(false); // Stop the timer
+    setIsRunning(false); // Stop timer
   };
 
   return (
@@ -36,7 +36,7 @@ const Pomodoro: React.FC = () => {
       >
         <Timer isRunning={isRunning} />
 
-        {/* Buttons Container */}
+        {/* Buttons */}
         <div
           style={{
             display: "flex",
@@ -45,7 +45,7 @@ const Pomodoro: React.FC = () => {
             marginTop: "50px",
           }}
         >
-          <PlayButton onClick={handlePlay} />
+          <PlayButton isRunning={isRunning} onClick={handlePlayPause} />
           <ResetButton onClick={handleReset} />
         </div>
       </div>
