@@ -114,7 +114,7 @@ const Pomodoro: React.FC = () => {
             letterSpacing: "2px",
           }}
         >
-          {timerState.isBreak ? "Pomodoro" : "Take a Break"}
+          {timerState.isBreak ? "Pomodoro" : "take a break"}
         </button>
 
         {/* Timer */}
@@ -207,10 +207,7 @@ const Pomodoro: React.FC = () => {
         </div>
       </div>
       {/* Fullscreen Button */}
-      <FullscreenButton
-        onClick={toggleFullscreen}
-        isFullscreen={isFullscreen}
-      />
+      <FullscreenButton onClick={toggleFullscreen} />
     </div>
   );
 };
