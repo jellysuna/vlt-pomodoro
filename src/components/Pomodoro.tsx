@@ -3,21 +3,22 @@ import background from "./img/vlt-bg.png";
 import Timer from "./Timer";
 import PlayButton from "./PlayButton";
 import ResetButton from "./RestartButton";
-import YouTube from "react-youtube"; // Import react-youtube
+import YouTube from "react-youtube";
+import FullscreenButton from "./FullscreenButton";
 
 const Pomodoro: React.FC = () => {
   const [timerState, setTimerState] = useState({
     isRunning: false,
     isBreak: false,
-    isMuted: true, // Start muted so autoplay can happen
+    isMuted: true,
   });
   const [time, setTime] = useState(25 * 60); // Start with 25 minutes (Pomodoro)
   const [player, setPlayer] = useState<any>(null); // Store YouTube player reference
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
-    // Ensure video starts playing immediately when page loads
     if (player && !timerState.isMuted) {
-      player.playVideo(); // Play the video immediately
+      player.playVideo();
     }
   }, [player, timerState.isMuted]);
 
@@ -47,7 +48,7 @@ const Pomodoro: React.FC = () => {
 
   // YouTube Player onReady callback to control playback
   const onPlayerReady = (event: any) => {
-    event.target.setVolume(50); // Adjust volume to 50%
+    event.target.setVolume(100);
     event.target.playVideo(); // Start playing the video
     setPlayer(event.target); // Save the player reference
   };
@@ -64,6 +65,17 @@ const Pomodoro: React.FC = () => {
         ...prev,
         isMuted: !prev.isMuted, // Toggle mute state
       }));
+    }
+  };
+
+  // Fullscreen toggle function
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement
+        .requestFullscreen()
+        .then(() => setIsFullscreen(true));
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen().then(() => setIsFullscreen(false));
     }
   };
 
@@ -194,6 +206,11 @@ const Pomodoro: React.FC = () => {
           />
         </div>
       </div>
+      {/* Fullscreen Button */}
+      <FullscreenButton
+        onClick={toggleFullscreen}
+        isFullscreen={isFullscreen}
+      />
     </div>
   );
 };
