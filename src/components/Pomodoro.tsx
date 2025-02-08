@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import background from "./img/vlt-bg.png";
+import Timer from "./Timer";
 import PlayButton from "./PlayButton";
 import ResetButton from "./RestartButton";
 
 const Pomodoro: React.FC = () => {
+  const [isRunning, setIsRunning] = useState(false);
+
   const handlePlay = () => {
-    console.log("Play button clicked!");
+    setIsRunning((prev) => !prev); // Toggle timer on/off
   };
 
   const handleReset = () => {
-    console.log("Reset button clicked!");
+    setIsRunning(false); // Stop the timer
   };
 
   return (
@@ -31,18 +34,7 @@ const Pomodoro: React.FC = () => {
           alignItems: "center",
         }}
       >
-        <h1
-          style={{
-            fontFamily: "'Jacquard 12', serif",
-            fontSize: "150px",
-            fontWeight: "bold",
-            paddingTop: "150px",
-            letterSpacing: "12px",
-            lineHeight: "28px",
-          }}
-        >
-          25:00
-        </h1>
+        <Timer isRunning={isRunning} />
 
         {/* Buttons Container */}
         <div
