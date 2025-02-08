@@ -1,6 +1,7 @@
 # Pomodoro Timer App
 
 A simple and interactive Pomodoro timer designed to enhance productivity by using time management techniques. The app features two different modes: Pomodoro and Break, background music (BGM) control, and alerts when the session ends.
+![Illustration @itxxuki](https://x.com/itxxuki)
 
 ## Features
 
