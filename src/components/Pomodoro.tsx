@@ -1,13 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import background from "./img/vlt-bg.png";
 import Timer from "./Timer";
 import PlayButton from "./PlayButton";
 import ResetButton from "./RestartButton";
+import YouTube from "react-youtube"; // Import react-youtube
 
 const Pomodoro: React.FC = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [isBreak, setIsBreak] = useState(false); // Track whether it's break time
   const [time, setTime] = useState(25 * 60); // Start with 25 minutes (Pomodoro)
+  const [isMuted, setIsMuted] = useState(true); // Start muted so autoplay can happen
+  const [player, setPlayer] = useState<any>(null); // Store YouTube player reference
+
+  useEffect(() => {
+    // Ensure video starts playing immediately when page loads
+    if (player && !isMuted) {
+      player.playVideo(); // Play the video immediately
+    }
+  }, [player, isMuted]);
 
   const handlePlayPause = () => {
     setIsRunning((prev) => !prev); // Toggle timer state
@@ -22,6 +32,32 @@ const Pomodoro: React.FC = () => {
     setIsRunning(false);
     setIsBreak((prev) => !prev); // Toggle between Pomodoro and break mode
     setTime(isBreak ? 25 * 60 : 5 * 60); // Change the time based on mode
+  };
+
+  // YouTube Player onReady callback to control playback
+  const onPlayerReady = (event: any) => {
+    event.target.setVolume(50); // Adjust volume to 50%
+    event.target.playVideo(); // Start playing the video
+    setPlayer(event.target); // Save the player reference
+  };
+
+  // YouTube Player onStateChange callback to stop the video when timer hits 0
+  const onPlayerStateChange = (event: any) => {
+    if (event.data === window.YT.PlayerState.PLAYING && time <= 1) {
+      event.target.stopVideo(); // Stop video when timer hits 0
+    }
+  };
+
+  // Toggle mute state for music
+  const toggleMusic = () => {
+    if (player) {
+      if (isMuted) {
+        player.unMute(); // Unmute video
+      } else {
+        player.mute(); // Mute video
+      }
+      setIsMuted(!isMuted); // Toggle mute state
+    }
   };
 
   return (
@@ -41,6 +77,7 @@ const Pomodoro: React.FC = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          position: "relative", // Add relative positioning
         }}
       >
         {/* "Take a Break" Button */}
@@ -75,6 +112,81 @@ const Pomodoro: React.FC = () => {
         >
           <PlayButton isRunning={isRunning} onClick={handlePlayPause} />
           <ResetButton onClick={handleReset} />
+        </div>
+
+        {/* Music Icon (Toggle Video Play/Pause) */}
+        <div
+          onClick={toggleMusic}
+          style={{
+            position: "absolute",
+            top: "20px",
+            right: "20px",
+            cursor: "pointer",
+            fontSize: "36px", // Icon size
+            color: "#4E4037",
+          }}
+        >
+          {isMuted ? (
+            // Icon with slash (mute)
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              className="bi bi-music-note-slash"
+              viewBox="0 0 16 16"
+            >
+              <path d="M12 1.5a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h8z" />
+              <path
+                fillRule="evenodd"
+                d="M8.654 9.776a1 1 0 0 0 1.392-.128l2.043-3.567A1 1 0 0 0 11.28 5.5h-3.363l-2.03 3.528a1 1 0 0 0 1.392 1.298z"
+              />
+            </svg>
+          ) : (
+            // Icon without slash (play)
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-music-note"
+              viewBox="0 0 16 16"
+            >
+              <path d="M9 13c0 1.105-1.12 2-2.5 2S4 14.105 4 13s1.12-2 2.5-2 2.5.895 2.5 2" />
+              <path fill-rule="evenodd" d="M9 3v10H8V3z" />
+              <path d="M8 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 13 2.22V4L8 5z" />
+            </svg>
+          )}
+        </div>
+
+        {/* YouTube Video as Background Music */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: "none", // Hide the video player
+          }}
+        >
+          <YouTube
+            videoId="_adXZhMCyVE" // Replace with your video ID
+            opts={{
+              height: "100%",
+              width: "100%",
+              playerVars: {
+                autoplay: 1,
+                controls: 0, // Hide controls
+                modestbranding: 1,
+                loop: 1,
+                playlist: "_adXZhMCyVE", // Loop the video
+                mute: isMuted ? 1 : 0, // Mute or unmute based on state
+              },
+            }}
+            onReady={onPlayerReady}
+            onStateChange={onPlayerStateChange}
+          />
         </div>
       </div>
     </div>
