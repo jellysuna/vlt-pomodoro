@@ -4,7 +4,7 @@ A simple and interactive Pomodoro timer designed to enhance productivity by usin
 
 ## Features
 
-- \*\*Pomodoro and Break Modes: Users can switch between Pomodoro sessions and break periods.
+- **Pomodoro and Break Modes**: Users can switch between Pomodoro sessions and break periods.
 - **Start/Pause/Reset Timer**: Users can start, pause, or reset the timer as needed.
 - **Background Music (BGM) Control**: Users can enable or disable background music.
 - **Session Alerts**: An alert is triggered when the timer reaches zero.
