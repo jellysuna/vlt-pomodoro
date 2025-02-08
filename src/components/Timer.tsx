@@ -36,9 +36,9 @@ const Timer: React.FC<TimerProps> = ({ isRunning, time, setTime }) => {
     <h1
       style={{
         fontFamily: "'Jacquard 12', serif",
-        fontSize: "150px",
+        fontSize: "160px",
         fontWeight: "bold",
-        paddingTop: "150px",
+        paddingTop: "50px",
         letterSpacing: "12px",
         lineHeight: "28px",
       }}

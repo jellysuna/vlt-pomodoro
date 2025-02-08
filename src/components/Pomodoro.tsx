@@ -6,7 +6,8 @@ import ResetButton from "./RestartButton";
 
 const Pomodoro: React.FC = () => {
   const [isRunning, setIsRunning] = useState(false);
-  const [time, setTime] = useState(1 * 60); // Start at 25 minutes
+  const [isBreak, setIsBreak] = useState(false); // Track whether it's break time
+  const [time, setTime] = useState(25 * 60); // Start with 25 minutes (Pomodoro)
 
   const handlePlayPause = () => {
     setIsRunning((prev) => !prev); // Toggle timer state
@@ -14,7 +15,13 @@ const Pomodoro: React.FC = () => {
 
   const handleReset = () => {
     setIsRunning(false); // Stop timer
-    setTime(1 * 60); // Reset timer to 25 minutes
+    setTime(isBreak ? 5 * 60 : 25 * 60); // Reset to either 5 or 25 minutes based on mode
+  };
+
+  const handleSwitchMode = () => {
+    setIsRunning(false);
+    setIsBreak((prev) => !prev); // Toggle between Pomodoro and break mode
+    setTime(isBreak ? 25 * 60 : 5 * 60); // Change the time based on mode
   };
 
   return (
@@ -36,6 +43,24 @@ const Pomodoro: React.FC = () => {
           alignItems: "center",
         }}
       >
+        {/* "Take a Break" Button */}
+        <button
+          onClick={handleSwitchMode}
+          style={{
+            fontSize: "20px",
+            fontWeight: "bold",
+            marginTop: "50px",
+            background: "transparent",
+            border: "3px solid #4E4037",
+            borderRadius: "13px",
+            color: "#4E4037",
+            cursor: "pointer",
+            letterSpacing: "2px",
+          }}
+        >
+          {isBreak ? "Pomodoro" : "Take a Break"}
+        </button>
+
         {/* Timer */}
         <Timer isRunning={isRunning} time={time} setTime={setTime} />
 
