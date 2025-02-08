@@ -41,13 +41,6 @@ const Pomodoro: React.FC = () => {
     setPlayer(event.target); // Save the player reference
   };
 
-  // YouTube Player onStateChange callback to stop the video when timer hits 0
-  const onPlayerStateChange = (event: any) => {
-    if (event.data === window.YT.PlayerState.PLAYING && time <= 1) {
-      event.target.stopVideo(); // Stop video when timer hits 0
-    }
-  };
-
   // Toggle mute state for music
   const toggleMusic = () => {
     if (player) {
@@ -181,7 +174,6 @@ const Pomodoro: React.FC = () => {
               },
             }}
             onReady={onPlayerReady}
-            onStateChange={onPlayerStateChange}
           />
         </div>
       </div>
