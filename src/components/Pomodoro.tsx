@@ -6,32 +6,43 @@ import ResetButton from "./RestartButton";
 import YouTube from "react-youtube"; // Import react-youtube
 
 const Pomodoro: React.FC = () => {
-  const [isRunning, setIsRunning] = useState(false);
-  const [isBreak, setIsBreak] = useState(false); // Track whether it's break time
+  const [timerState, setTimerState] = useState({
+    isRunning: false,
+    isBreak: false,
+    isMuted: true, // Start muted so autoplay can happen
+  });
   const [time, setTime] = useState(25 * 60); // Start with 25 minutes (Pomodoro)
-  const [isMuted, setIsMuted] = useState(true); // Start muted so autoplay can happen
   const [player, setPlayer] = useState<any>(null); // Store YouTube player reference
 
   useEffect(() => {
     // Ensure video starts playing immediately when page loads
-    if (player && !isMuted) {
+    if (player && !timerState.isMuted) {
       player.playVideo(); // Play the video immediately
     }
-  }, [player, isMuted]);
+  }, [player, timerState.isMuted]);
 
   const handlePlayPause = () => {
-    setIsRunning((prev) => !prev); // Toggle timer state
+    setTimerState((prev) => ({
+      ...prev,
+      isRunning: !prev.isRunning, // Toggle timer state
+    }));
   };
 
   const handleReset = () => {
-    setIsRunning(false); // Stop timer
-    setTime(isBreak ? 5 * 60 : 25 * 60); // Reset to either 5 or 25 minutes based on mode
+    setTimerState((prev) => ({
+      ...prev,
+      isRunning: false, // Stop timer
+    }));
+    setTime(timerState.isBreak ? 5 * 60 : 25 * 60); // Reset to either 5 or 25 minutes based on mode
   };
 
   const handleSwitchMode = () => {
-    setIsRunning(false);
-    setIsBreak((prev) => !prev); // Toggle between Pomodoro and break mode
-    setTime(isBreak ? 25 * 60 : 5 * 60); // Change the time based on mode
+    setTimerState((prev) => ({
+      ...prev,
+      isRunning: false, // Stop the timer when switching mode
+      isBreak: !prev.isBreak, // Toggle between Pomodoro and break mode
+    }));
+    setTime(timerState.isBreak ? 25 * 60 : 5 * 60); // Change the time based on mode
   };
 
   // YouTube Player onReady callback to control playback
@@ -44,12 +55,15 @@ const Pomodoro: React.FC = () => {
   // Toggle mute state for music
   const toggleMusic = () => {
     if (player) {
-      if (isMuted) {
+      if (timerState.isMuted) {
         player.unMute(); // Unmute video
       } else {
         player.mute(); // Mute video
       }
-      setIsMuted(!isMuted); // Toggle mute state
+      setTimerState((prev) => ({
+        ...prev,
+        isMuted: !prev.isMuted, // Toggle mute state
+      }));
     }
   };
 
@@ -88,11 +102,11 @@ const Pomodoro: React.FC = () => {
             letterSpacing: "2px",
           }}
         >
-          {isBreak ? "Pomodoro" : "Take a Break"}
+          {timerState.isBreak ? "Pomodoro" : "Take a Break"}
         </button>
 
         {/* Timer */}
-        <Timer isRunning={isRunning} time={time} setTime={setTime} />
+        <Timer isRunning={timerState.isRunning} time={time} setTime={setTime} />
 
         {/* Buttons */}
         <div
@@ -103,7 +117,10 @@ const Pomodoro: React.FC = () => {
             marginTop: "50px",
           }}
         >
-          <PlayButton isRunning={isRunning} onClick={handlePlayPause} />
+          <PlayButton
+            isRunning={timerState.isRunning}
+            onClick={handlePlayPause}
+          />
           <ResetButton onClick={handleReset} />
         </div>
 
@@ -119,7 +136,7 @@ const Pomodoro: React.FC = () => {
             color: "#4E4037",
           }}
         >
-          {isMuted ? (
+          {timerState.isMuted ? (
             // silent icon (bgm mute)
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -170,7 +187,7 @@ const Pomodoro: React.FC = () => {
                 modestbranding: 1,
                 loop: 1,
                 playlist: "_adXZhMCyVE", // Loop the video
-                mute: isMuted ? 1 : 0, // Mute or unmute based on state
+                mute: timerState.isMuted ? 1 : 0, // Mute or unmute based on state
               },
             }}
             onReady={onPlayerReady}
