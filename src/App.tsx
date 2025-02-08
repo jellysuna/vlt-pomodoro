@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Button from "./components/Button";
 import Alert from "./components/Alert";
+import Pomodoro from "./components/Pomodoro";
 
+/*
 function App() {
   const [alertVisible, setAlertVisibility] = useState(false);
 
@@ -16,5 +18,13 @@ function App() {
     </div>
   );
 }
+*/
 
+function App() {
+  return (
+    <div>
+      <Pomodoro />
+    </div>
+  );
+}
 export default App;
