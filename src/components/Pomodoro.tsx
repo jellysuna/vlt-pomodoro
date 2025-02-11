@@ -5,6 +5,7 @@ import PlayButton from "./PlayButton";
 import ResetButton from "./RestartButton";
 import YouTube from "react-youtube";
 import FullscreenButton from "./FullscreenButton";
+import { Link } from "react-router-dom";
 
 const Pomodoro: React.FC = () => {
   const [timerState, setTimerState] = useState({
@@ -208,6 +209,26 @@ const Pomodoro: React.FC = () => {
       </div>
       {/* Fullscreen Button */}
       <FullscreenButton onClick={toggleFullscreen} />
+
+      {/* View Statistics Button */}
+      <Link to="/statistics">
+        <button
+          style={{
+            fontSize: "12px",
+            position: "absolute",
+            bottom: "15px",
+            right: "55px",
+            padding: "5px 5px",
+            backgroundColor: "#4E4037",
+            color: "#fff",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
+          View Statistics
+        </button>
+      </Link>
     </div>
   );
 };
