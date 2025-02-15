@@ -2,61 +2,66 @@ import { useState, useEffect } from "react";
 
 interface Statistics {
   completedPomodoros: number;
-  totalPomodoroTime: number; //in secs
+  totalPomodoroTime: number; // in seconds
   completedBreaks: number;
-  totalBreakTime: number; //in secs
+  totalBreakTime: number; // in seconds
+  completedCycles: number;
 }
 
-const STATISTICS_KEY = "PomodoroStatistics"; //key for localstorage
-
 const useStatistics = () => {
-  // Load statistics from localStorage or initialize with default values
-  const [stats, setStats] = useState<Statistics>(() => {
-    const savedStats = localStorage.getItem(STATISTICS_KEY);
-    return savedStats
-      ? JSON.parse(savedStats) // Parse stored JSON if available
-      : {
-          completedPomodoros: 0,
-          totalPomodoroTime: 0,
-          completedBreaks: 0,
-          totalBreakTime: 0,
-        };
+  const [stats, setStats] = useState<Statistics>({
+    completedPomodoros: 0,
+    totalPomodoroTime: 0,
+    completedBreaks: 0,
+    totalBreakTime: 0,
+    completedCycles: 0,
   });
+
+  // Load stats from localStorage on first render
+  useEffect(() => {
+    const savedStats = localStorage.getItem("pomodoroStats");
+    if (savedStats) {
+      setStats(JSON.parse(savedStats));
+    }
+  }, []);
 
   // Save stats to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem(STATISTICS_KEY, JSON.stringify(stats));
+    localStorage.setItem("pomodoroStats", JSON.stringify(stats));
   }, [stats]);
 
-  // Function to add a completed Pomodoro session and update total time
+  // Function to add a completed Pomodoro session
   const addPomodoroSession = (duration: number) => {
-    setStats((prev) => ({
-      ...prev,
-      completedPomodoros: prev.completedPomodoros + 1,
-      totalPomodoroTime: prev.totalPomodoroTime + duration,
-    }));
-  };
+    setStats((prevStats) => {
+      const newPomodoroCount = prevStats.completedPomodoros + 1;
+      const newPomodoroTime = prevStats.totalPomodoroTime + duration;
 
-  // Function to add a completed break session and update total break time
-  const addBreakSession = (duration: number) => {
-    setStats((prev) => ({
-      ...prev,
-      completedBreaks: prev.completedBreaks + 1,
-      totalBreakTime: prev.totalBreakTime + duration,
-    }));
-  };
-
-  // Function to reset all statistics to zero
-  const resetStatistics = () => {
-    setStats({
-      completedPomodoros: 0,
-      totalPomodoroTime: 0,
-      completedBreaks: 0,
-      totalBreakTime: 0,
+      return {
+        ...prevStats,
+        completedPomodoros: newPomodoroCount,
+        totalPomodoroTime: newPomodoroTime,
+        completedCycles:
+          newPomodoroCount % 4 === 0
+            ? prevStats.completedCycles + 1
+            : prevStats.completedCycles, // Increase cycle every 4 Pomodoros
+      };
     });
   };
 
-  return { stats, addPomodoroSession, addBreakSession, resetStatistics };
+  // Function to add a completed Break session
+  const addBreakSession = (duration: number) => {
+    setStats((prevStats) => ({
+      ...prevStats,
+      completedBreaks: prevStats.completedBreaks + 1,
+      totalBreakTime: prevStats.totalBreakTime + duration,
+    }));
+  };
+
+  return {
+    stats,
+    addPomodoroSession,
+    addBreakSession,
+  };
 };
 
 export default useStatistics;

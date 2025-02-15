@@ -1,6 +1,7 @@
 import React from "react";
 import useStatistics from "./useStatistics"; //import custom hook
 import { Link } from "react-router-dom";
+import ClearStatisticsButton from "./ClearStatisticsButton";
 
 const StatisticsPage: React.FC = () => {
   const { stats } = useStatistics(); // Get stats from the hook
@@ -21,6 +22,7 @@ const StatisticsPage: React.FC = () => {
         <p>Completed Breaks: {stats.completedBreaks}</p>
         <p>Total Break Time: {Math.floor(stats.totalBreakTime / 60)} minutes</p>
       </div>
+      <ClearStatisticsButton />
     </div>
   );
 };
