@@ -27,15 +27,25 @@ const StatisticsPage: React.FC = () => {
         {/* Pomodoro Stats */}
         <div className="flex flex-col items-center">
           <h2 className="text-xl font-semibold">🍅 Pomodoro</h2>
-          <p className="text-2xl font-bold">{formatTime(pomodoroStats.time)}</p>
-          <p className="text-lg">Completed: {pomodoroStats.cycles}</p>
+          <p className="text-2xl font-bold">
+            Working time:{" "}
+            {pomodoroStats?.time ? formatTime(pomodoroStats.time) : "0h 0m"}
+          </p>
+          <p className="text-lg">
+            Completed: {pomodoroStats?.cycles ? pomodoroStats.cycles : "0"}
+          </p>
         </div>
 
         {/* Break Stats */}
         <div className="flex flex-col items-center">
           <h2 className="text-xl font-semibold">☕ Break</h2>
-          <p className="text-2xl font-bold">{formatTime(breakStats.time)}</p>
-          <p className="text-lg">Completed: {breakStats.cycles}</p>
+          <p className="text-2xl font-bold">
+            Break time:{" "}
+            {breakStats?.time ? formatTime(breakStats.time) : "0h 0m"}
+          </p>
+          <p className="text-lg">
+            Completed: {breakStats?.cycles ? breakStats.cycles : "0"}
+          </p>
         </div>
       </div>
 
