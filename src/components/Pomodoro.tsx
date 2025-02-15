@@ -5,6 +5,7 @@ import PlayButton from "./PlayButton";
 import ResetButton from "./RestartButton";
 import YouTube from "react-youtube";
 import FullscreenButton from "./FullscreenButton";
+import { Link } from "react-router-dom";
 
 const Pomodoro: React.FC = () => {
   const [timerState, setTimerState] = useState({
@@ -21,6 +22,12 @@ const Pomodoro: React.FC = () => {
       player.playVideo();
     }
   }, [player, timerState.isMuted]);
+
+  useEffect(() => {
+    if (time === 0) {
+      recordSession(timerState.isBreak, timerState.isBreak ? 5 * 60 : 25 * 60);
+    }
+  }, [time]);
 
   const handlePlayPause = () => {
     setTimerState((prev) => ({
@@ -44,6 +51,17 @@ const Pomodoro: React.FC = () => {
       isBreak: !prev.isBreak, // Toggle between Pomodoro and break mode
     }));
     setTime(timerState.isBreak ? 25 * 60 : 5 * 60); // Change the time based on mode
+  };
+
+  const recordSession = (isBreak: boolean, duration: number) => {
+    const key = isBreak ? "breakStats" : "pomodoroStats";
+    const storedData = localStorage.getItem(key);
+    let stats = storedData ? JSON.parse(storedData) : { time: 0, cycles: 0 };
+
+    const elapsed = isBreak ? 5 * 60 - time : 25 * 60 - time; // Capture actual time spent
+    stats.time += elapsed;
+    stats.cycles += 1;
+    localStorage.setItem(key, JSON.stringify(stats));
   };
 
   // YouTube Player onReady callback to control playback
@@ -140,9 +158,9 @@ const Pomodoro: React.FC = () => {
         <div
           onClick={toggleMusic}
           style={{
-            position: "absolute",
-            top: "20px",
-            right: "20px",
+            position: "relative",
+            top: "-270px",
+            marginLeft: "215px",
             cursor: "pointer",
             fontSize: "36px", // Icon size
             color: "#4E4037",
@@ -177,37 +195,45 @@ const Pomodoro: React.FC = () => {
           )}
         </div>
 
-        {/* YouTube Video as Background Music */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: "none", // Hide the video player
+        <YouTube
+          videoId="_adXZhMCyVE"
+          opts={{
+            height: "100%",
+            width: "100%",
+            playerVars: {
+              autoplay: 1,
+              controls: 0,
+              modestbranding: 1,
+              loop: 1,
+              playlist: "_adXZhMCyVE",
+              mute: timerState.isMuted ? 1 : 0,
+            },
           }}
-        >
-          <YouTube
-            videoId="_adXZhMCyVE" // Replace with your video ID
-            opts={{
-              height: "100%",
-              width: "100%",
-              playerVars: {
-                autoplay: 1,
-                controls: 0, // Hide controls
-                modestbranding: 1,
-                loop: 1,
-                playlist: "_adXZhMCyVE", // Loop the video
-                mute: timerState.isMuted ? 1 : 0, // Mute or unmute based on state
-              },
-            }}
-            onReady={onPlayerReady}
-          />
-        </div>
+          onReady={onPlayerReady}
+          style={{ display: "none" }}
+        />
       </div>
-      {/* Fullscreen Button */}
       <FullscreenButton onClick={toggleFullscreen} />
+
+      {/* View Statistics Button */}
+      <Link to="/statistics">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          fill="currentColor"
+          style={{
+            cursor: "pointer",
+            color: "#4E4037",
+            position: "absolute",
+            bottom: "20px",
+            right: "50px",
+          }}
+          viewBox="0 0 16 16"
+        >
+          <path d="M4 11H2v3h2zm5-4H7v7h2zm5-5v12h-2V2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z" />
+        </svg>
+      </Link>
     </div>
   );
 };

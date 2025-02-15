@@ -1,30 +1,16 @@
 import { useState } from "react";
-import Button from "./components/Button";
-import Alert from "./components/Alert";
 import Pomodoro from "./components/Pomodoro";
+import StatisticsPage from "./components/StatisticsPage";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-/*
-function App() {
-  const [alertVisible, setAlertVisibility] = useState(false);
-
+const App: React.FC = () => {
   return (
-    <div>
-      {alertVisible && (
-        <Alert onClose={() => setAlertVisibility(false)}>My alert</Alert>
-      )}
-      <Button color="primary" onClick={() => setAlertVisibility(true)}>
-        My Button
-      </Button>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Pomodoro />} />
+        <Route path="/statistics" element={<StatisticsPage />} />
+      </Routes>
+    </Router>
   );
-}
-*/
-
-function App() {
-  return (
-    <div>
-      <Pomodoro />
-    </div>
-  );
-}
+};
 export default App;
