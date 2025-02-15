@@ -58,7 +58,8 @@ const Pomodoro: React.FC = () => {
     const storedData = localStorage.getItem(key);
     let stats = storedData ? JSON.parse(storedData) : { time: 0, cycles: 0 };
 
-    stats.time += duration;
+    const elapsed = isBreak ? 5 * 60 - time : 25 * 60 - time; // Capture actual time spent
+    stats.time += elapsed;
     stats.cycles += 1;
     localStorage.setItem(key, JSON.stringify(stats));
   };
