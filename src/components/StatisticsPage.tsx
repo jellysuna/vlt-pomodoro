@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import background from "./img/plain-bg.png";
 
 const StatisticsPage: React.FC = () => {
   const [pomodoroStats, setPomodoroStats] = useState({ time: 0, cycles: 0 });
@@ -20,42 +21,87 @@ const StatisticsPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-800">
-      <h1 className="text-3xl font-bold mb-6">📊 Your Pomodoro Stats</h1>
-
-      <div className="grid grid-cols-2 gap-6 bg-white p-6 rounded-2xl shadow-lg">
-        {/* Pomodoro Stats */}
-        <div className="flex flex-col items-center">
-          <h2 className="text-xl font-semibold">🍅 Pomodoro</h2>
-          <p className="text-2xl font-bold">
-            Working time:{" "}
-            {pomodoroStats?.time ? formatTime(pomodoroStats.time) : "0h 0m"}
-          </p>
-          <p className="text-lg">
-            Completed: {pomodoroStats?.cycles ? pomodoroStats.cycles : "0"}
-          </p>
-        </div>
-
-        {/* Break Stats */}
-        <div className="flex flex-col items-center">
-          <h2 className="text-xl font-semibold">☕ Break</h2>
-          <p className="text-2xl font-bold">
-            Break time:{" "}
-            {breakStats?.time ? formatTime(breakStats.time) : "0h 0m"}
-          </p>
-          <p className="text-lg">
-            Completed: {breakStats?.cycles ? breakStats.cycles : "0"}
-          </p>
-        </div>
-      </div>
-
-      {/* Back Button */}
-      <Link
-        to="/"
-        className="mt-6 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700"
+    <div
+      style={{
+        backgroundImage: `url(${background})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "#4E4037",
+      }}
+    >
+      <div
+        style={{
+          textAlign: "center",
+          minWidth: "300px",
+        }}
       >
-        ⬅ Back to Timer
-      </Link>
+        <h1
+          style={{
+            fontSize: "24px",
+            fontWeight: "bold",
+            marginBottom: "16px",
+            paddingTop: "50px",
+          }}
+        >
+          Pomodoro Stats
+        </h1>
+
+        <div
+          style={{
+            display: "column",
+            gap: "20px",
+            padding: "20px",
+            borderRadius: "10px",
+          }}
+        >
+          {/* Pomodoro Stats */}
+          <div style={{ textAlign: "center" }}>
+            <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>
+              🍅 Pomodoro
+            </h2>
+            <p style={{ fontSize: "18px", fontWeight: "bold" }}>
+              Working time:{" "}
+              {pomodoroStats?.time ? formatTime(pomodoroStats.time) : "0h 0m"}
+            </p>
+            <p style={{ fontSize: "16px" }}>
+              Completed: {pomodoroStats?.cycles ? pomodoroStats.cycles : "0"}
+            </p>
+          </div>
+
+          {/* Break Stats */}
+          <div style={{ textAlign: "center" }}>
+            <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>☕ Break</h2>
+            <p style={{ fontSize: "18px", fontWeight: "bold" }}>
+              Break time:{" "}
+              {breakStats?.time ? formatTime(breakStats.time) : "0h 0m"}
+            </p>
+            <p style={{ fontSize: "16px" }}>
+              Completed: {breakStats?.cycles ? breakStats.cycles : "0"}
+            </p>
+          </div>
+        </div>
+
+        {/* Back Button */}
+        <Link
+          to="/"
+          style={{
+            marginTop: "20px",
+            padding: "10px 20px",
+            backgroundColor: "#333",
+            color: "white",
+            borderRadius: "8px",
+            textDecoration: "none",
+            display: "inline-block",
+          }}
+        >
+          ⬅ Back to Timer
+        </Link>
+      </div>
     </div>
   );
 };
