@@ -53,7 +53,8 @@ const StatisticsPage: React.FC = () => {
 
         <div
           style={{
-            display: "column",
+            display: "flex",
+            flexDirection: "column",
             gap: "20px",
             padding: "20px",
             borderRadius: "10px",
@@ -62,69 +63,115 @@ const StatisticsPage: React.FC = () => {
           {/* Pomodoro Stats */}
           <div
             style={{
-              backgroundColor: "#ffff",
-              borderRadius: "10px",
-              height: "70px",
-              width: "6px",
-              marginLeft: "18px",
-            }}
-          ></div>
-          <div
-            style={{
               backgroundColor: "#b5e2ff",
-              padding: "25px 300px 20px 60px",
-              marginTop: "-90px",
-              marginBottom: "30px",
+              padding: "25px 230px 20px 25px",
               borderRadius: "15px",
               textAlign: "left",
               minWidth: "300px",
+              display: "flex",
+              alignItems: "center", // Aligns the line and text
             }}
           >
-            <h2
+            {/* Vertical Line Inside */}
+            <div
               style={{
-                fontSize: "20px",
-                fontWeight: "bold",
-                paddingBottom: "10px",
+                backgroundColor: "#5897b5",
+                borderRadius: "10px",
+                height: "100px",
+                width: "6px",
+                marginRight: "15px", // Space between line and text
               }}
-            >
-              🍅 Pomodoro
-            </h2>
-            <p style={{ fontSize: "16px", marginTop: "10px" }}>
-              Working time:{" "}
-              {pomodoroStats?.time ? formatTime(pomodoroStats.time) : "0h 0m"}
-            </p>
-            <p style={{ fontSize: "16px", marginTop: "-5px" }}>
-              Completed: {pomodoroStats?.cycles ? pomodoroStats.cycles : "0"}
-            </p>
+            ></div>
+
+            {/* Text Section */}
+            <div>
+              <h2
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  paddingBottom: "10px",
+                  paddingLeft: "20px",
+                }}
+              >
+                🍅 Pomodoro
+              </h2>
+              <p
+                style={{
+                  fontSize: "16px",
+                  marginTop: "10px",
+                  paddingLeft: "20px",
+                }}
+              >
+                Working time:{" "}
+                {pomodoroStats?.time ? formatTime(pomodoroStats.time) : "0h 0m"}
+              </p>
+              <p
+                style={{
+                  fontSize: "16px",
+                  marginTop: "-5px",
+                  paddingLeft: "20px",
+                }}
+              >
+                Completed: {pomodoroStats?.cycles ? pomodoroStats.cycles : "0"}
+              </p>
+            </div>
           </div>
 
           {/* Break Stats */}
           <div
             style={{
               backgroundColor: "#abf7b1",
-              padding: "25px 300px 20px 60px",
-              marginBottom: "30px",
+              padding: "25px 230px 20px 25px",
               borderRadius: "15px",
               textAlign: "left",
               minWidth: "300px",
+              display: "flex",
+              alignItems: "center", // Aligns the line and text
             }}
           >
-            <h2
+            {/* Vertical Line Inside */}
+            <div
               style={{
-                fontSize: "20px",
-                fontWeight: "bold",
-                paddingBottom: "10px",
+                backgroundColor: "#58b574",
+                borderRadius: "10px",
+                height: "100px",
+                width: "6px",
+                marginRight: "15px", // Space between line and text
               }}
-            >
-              ☕ Break
-            </h2>
-            <p style={{ fontSize: "16px", marginTop: "10px" }}>
-              Break time:{" "}
-              {breakStats?.time ? formatTime(breakStats.time) : "0h 0m"}
-            </p>
-            <p style={{ fontSize: "16px", marginTop: "-5px" }}>
-              Completed: {breakStats?.cycles ? breakStats.cycles : "0"}
-            </p>
+            ></div>
+
+            {/* Text Section */}
+            <div>
+              <h2
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  paddingBottom: "10px",
+                  paddingLeft: "20px",
+                }}
+              >
+                ☕ Break
+              </h2>
+              <p
+                style={{
+                  fontSize: "16px",
+                  marginTop: "10px",
+                  paddingLeft: "20px",
+                }}
+              >
+                Break time:{" "}
+                {breakStats?.time ? formatTime(breakStats.time) : "0h 0m"}
+              </p>
+              <p
+                style={{
+                  fontSize: "16px",
+                  marginTop: "-5px",
+                  paddingLeft: "20px",
+                }}
+              >
+                Completed: {breakStats?.cycles ? breakStats.cycles : "0"}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -134,14 +181,29 @@ const StatisticsPage: React.FC = () => {
           style={{
             marginTop: "20px",
             padding: "10px 20px",
-            backgroundColor: "#333",
-            color: "white",
+            backgroundColor: "none",
+            color: "#4E4037",
             borderRadius: "8px",
             textDecoration: "none",
-            display: "inline-block",
+            display: "inline-flex",
+            alignItems: "center", // Align icon and text
+            gap: "8px", // Space between icon and text
           }}
         >
-          ⬅ Back to Timer
+          {/* SVG Arrow Icon */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fillRule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+            />
+          </svg>
+          Back to Timer
         </Link>
       </div>
     </div>
