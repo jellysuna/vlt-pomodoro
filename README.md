@@ -10,6 +10,7 @@ A simple and interactive Pomodoro timer designed to enhance productivity by usin
 - **Background Music (BGM) Control**: Users can enable or disable background music.
 - **Session Alerts**: An alert is triggered when the timer reaches zero.
 - **Fullscreen Mode**: Toggle fullscreen mode for a distraction-free experience.
+- **Session Statistics Tracking**: Users can view statistics of their completed Pomodoro and break sessions, including total time spent and session history.
 
 ## Technologies Used
 
@@ -24,3 +25,4 @@ A simple and interactive Pomodoro timer designed to enhance productivity by usin
 4. Toggle BGM on or off by clicking the BGM button.
 5. When the timer ends, an alert will notify user.
 6. Users can switch to **Break** mode when Pomodoro session ends.
+7. View session statistics in the **Statistics** section to track productivity over time.
