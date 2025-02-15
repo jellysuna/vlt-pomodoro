@@ -42,10 +42,10 @@ const StatisticsPage: React.FC = () => {
       >
         <h1
           style={{
-            fontSize: "24px",
+            fontFamily: "'Roboto Mono', serif",
+            fontSize: "44px",
             fontWeight: "bold",
-            marginBottom: "16px",
-            paddingTop: "50px",
+            marginBottom: "40px",
           }}
         >
           Pomodoro Stats
@@ -60,27 +60,69 @@ const StatisticsPage: React.FC = () => {
           }}
         >
           {/* Pomodoro Stats */}
-          <div style={{ textAlign: "center" }}>
-            <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>
+          <div
+            style={{
+              backgroundColor: "#ffff",
+              borderRadius: "10px",
+              height: "70px",
+              width: "6px",
+              marginLeft: "18px",
+            }}
+          ></div>
+          <div
+            style={{
+              backgroundColor: "#b5e2ff",
+              padding: "25px 300px 20px 60px",
+              marginTop: "-90px",
+              marginBottom: "30px",
+              borderRadius: "15px",
+              textAlign: "left",
+              minWidth: "300px",
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "20px",
+                fontWeight: "bold",
+                paddingBottom: "10px",
+              }}
+            >
               🍅 Pomodoro
             </h2>
-            <p style={{ fontSize: "18px", fontWeight: "bold" }}>
+            <p style={{ fontSize: "16px", marginTop: "10px" }}>
               Working time:{" "}
               {pomodoroStats?.time ? formatTime(pomodoroStats.time) : "0h 0m"}
             </p>
-            <p style={{ fontSize: "16px" }}>
+            <p style={{ fontSize: "16px", marginTop: "-5px" }}>
               Completed: {pomodoroStats?.cycles ? pomodoroStats.cycles : "0"}
             </p>
           </div>
 
           {/* Break Stats */}
-          <div style={{ textAlign: "center" }}>
-            <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>☕ Break</h2>
-            <p style={{ fontSize: "18px", fontWeight: "bold" }}>
+          <div
+            style={{
+              backgroundColor: "#abf7b1",
+              padding: "25px 300px 20px 60px",
+              marginBottom: "30px",
+              borderRadius: "15px",
+              textAlign: "left",
+              minWidth: "300px",
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "20px",
+                fontWeight: "bold",
+                paddingBottom: "10px",
+              }}
+            >
+              ☕ Break
+            </h2>
+            <p style={{ fontSize: "16px", marginTop: "10px" }}>
               Break time:{" "}
               {breakStats?.time ? formatTime(breakStats.time) : "0h 0m"}
             </p>
-            <p style={{ fontSize: "16px" }}>
+            <p style={{ fontSize: "16px", marginTop: "-5px" }}>
               Completed: {breakStats?.cycles ? breakStats.cycles : "0"}
             </p>
           </div>
