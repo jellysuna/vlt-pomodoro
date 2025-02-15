@@ -13,8 +13,8 @@ const Pomodoro: React.FC = () => {
     isBreak: false,
     isMuted: true,
   });
-  const [time, setTime] = useState(25 * 60); // Start with 25 minutes (Pomodoro)
-  const [player, setPlayer] = useState<any>(null); // Store YouTube player reference
+  const [time, setTime] = useState(25 * 60);
+  const [player, setPlayer] = useState<any>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
@@ -23,53 +23,67 @@ const Pomodoro: React.FC = () => {
     }
   }, [player, timerState.isMuted]);
 
+  useEffect(() => {
+    if (time === 0) {
+      recordSession(timerState.isBreak, timerState.isBreak ? 5 * 60 : 25 * 60);
+      handleSwitchMode();
+    }
+  }, [time]);
+
   const handlePlayPause = () => {
     setTimerState((prev) => ({
       ...prev,
-      isRunning: !prev.isRunning, // Toggle timer state
+      isRunning: !prev.isRunning,
     }));
   };
 
   const handleReset = () => {
     setTimerState((prev) => ({
       ...prev,
-      isRunning: false, // Stop timer
+      isRunning: false,
     }));
-    setTime(timerState.isBreak ? 5 * 60 : 25 * 60); // Reset to either 5 or 25 minutes based on mode
+    setTime(timerState.isBreak ? 5 * 60 : 25 * 60);
   };
 
   const handleSwitchMode = () => {
     setTimerState((prev) => ({
       ...prev,
-      isRunning: false, // Stop the timer when switching mode
-      isBreak: !prev.isBreak, // Toggle between Pomodoro and break mode
+      isRunning: false,
+      isBreak: !prev.isBreak,
     }));
-    setTime(timerState.isBreak ? 25 * 60 : 5 * 60); // Change the time based on mode
+    setTime(timerState.isBreak ? 25 * 60 : 5 * 60);
   };
 
-  // YouTube Player onReady callback to control playback
+  const recordSession = (isBreak: boolean, duration: number) => {
+    const key = isBreak ? "breakStats" : "pomodoroStats";
+    const storedData = localStorage.getItem(key);
+    let stats = storedData ? JSON.parse(storedData) : { time: 0, cycles: 0 };
+
+    stats.time += duration;
+    stats.cycles += 1;
+    localStorage.setItem(key, JSON.stringify(stats));
+  };
+
   const onPlayerReady = (event: any) => {
     event.target.setVolume(100);
-    event.target.playVideo(); // Start playing the video
-    setPlayer(event.target); // Save the player reference
+    event.target.playVideo();
+    setPlayer(event.target);
   };
 
-  // Toggle mute state for music
   const toggleMusic = () => {
     if (player) {
       if (timerState.isMuted) {
-        player.unMute(); // Unmute video
+        player.unMute();
       } else {
-        player.mute(); // Mute video
+        player.mute();
       }
       setTimerState((prev) => ({
         ...prev,
-        isMuted: !prev.isMuted, // Toggle mute state
+        isMuted: !prev.isMuted,
       }));
     }
   };
 
-  // Fullscreen toggle function
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
       document.documentElement
@@ -97,10 +111,9 @@ const Pomodoro: React.FC = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          position: "relative", // Add relative positioning
+          position: "relative",
         }}
       >
-        {/* "Take a Break" Button */}
         <button
           onClick={handleSwitchMode}
           style={{
@@ -118,10 +131,8 @@ const Pomodoro: React.FC = () => {
           {timerState.isBreak ? "Pomodoro" : "take a break"}
         </button>
 
-        {/* Timer */}
         <Timer isRunning={timerState.isRunning} time={time} setTime={setTime} />
 
-        {/* Buttons */}
         <div
           style={{
             display: "flex",
@@ -137,13 +148,12 @@ const Pomodoro: React.FC = () => {
           <ResetButton onClick={handleReset} />
         </div>
 
-        {/* Music Icon (Toggle Video Play/Pause) */}
         <div
           onClick={toggleMusic}
           style={{
-            position: "absolute",
-            top: "20px",
-            right: "20px",
+            position: "relative",
+            top: "-270px",
+            marginLeft: "215px",
             cursor: "pointer",
             fontSize: "36px", // Icon size
             color: "#4E4037",
@@ -178,56 +188,44 @@ const Pomodoro: React.FC = () => {
           )}
         </div>
 
-        {/* YouTube Video as Background Music */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: "none", // Hide the video player
+        <YouTube
+          videoId="_adXZhMCyVE"
+          opts={{
+            height: "100%",
+            width: "100%",
+            playerVars: {
+              autoplay: 1,
+              controls: 0,
+              modestbranding: 1,
+              loop: 1,
+              playlist: "_adXZhMCyVE",
+              mute: timerState.isMuted ? 1 : 0,
+            },
           }}
-        >
-          <YouTube
-            videoId="_adXZhMCyVE" // Replace with your video ID
-            opts={{
-              height: "100%",
-              width: "100%",
-              playerVars: {
-                autoplay: 1,
-                controls: 0, // Hide controls
-                modestbranding: 1,
-                loop: 1,
-                playlist: "_adXZhMCyVE", // Loop the video
-                mute: timerState.isMuted ? 1 : 0, // Mute or unmute based on state
-              },
-            }}
-            onReady={onPlayerReady}
-          />
-        </div>
+          onReady={onPlayerReady}
+          style={{ display: "none" }}
+        />
       </div>
-      {/* Fullscreen Button */}
       <FullscreenButton onClick={toggleFullscreen} />
 
       {/* View Statistics Button */}
       <Link to="/statistics">
-        <button
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          fill="currentColor"
           style={{
-            fontSize: "12px",
-            position: "absolute",
-            bottom: "15px",
-            right: "55px",
-            padding: "5px 5px",
-            backgroundColor: "#4E4037",
-            color: "#fff",
-            border: "none",
-            borderRadius: "8px",
             cursor: "pointer",
+            color: "#4E4037",
+            position: "absolute",
+            bottom: "20px",
+            right: "50px",
           }}
+          viewBox="0 0 16 16"
         >
-          View Statistics
-        </button>
+          <path d="M4 11H2v3h2zm5-4H7v7h2zm5-5v12h-2V2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z" />
+        </svg>
       </Link>
     </div>
   );
